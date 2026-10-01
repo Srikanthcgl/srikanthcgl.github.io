@@ -1,25 +1,28 @@
 import { useState } from "react";
 import type { ReactElement } from "react";
-import { Apps } from "./components/Apps";
 import { Header } from "./components/Header";
 import { Hero } from "./components/Hero";
 import { ProjectDialog } from "./components/ProjectDialog";
 import type { Project } from "./components/ProjectDialog";
-import { About, Contact, Experience, Footer, Projects, Skills } from "./components/Sections";
+import { StateRail } from "./components/StateRail";
+import { About } from "./components/sections/About";
+import { Contact } from "./components/sections/Contact";
+import { Experience } from "./components/sections/Experience";
+import { Projects } from "./components/sections/Projects";
+import { Skills } from "./components/sections/Skills";
 import { site } from "./config";
 import type { SectionId } from "./config";
+import { AmbientField } from "./engine/AmbientField";
+import { CursorField } from "./engine/CursorField";
+import { ThemeController } from "./engine/ThemeController";
 import { useReveal } from "./hooks/useReveal";
-import { useSpotlight } from "./hooks/useSpotlight";
-import { Backdrop } from "./scenery/Backdrop";
 
 export default function App() {
   const [project, setProject] = useState<Project | null>(null);
   useReveal();
-  useSpotlight();
 
   const renderers: Record<SectionId, () => ReactElement> = {
     about: () => <About />,
-    apps: () => <Apps />,
     projects: () => <Projects onOpen={setProject} />,
     skills: () => <Skills />,
     experience: () => <Experience />,
@@ -29,14 +32,15 @@ export default function App() {
   return (
     <>
       <a className="skip-link" href="#main">Skip to content</a>
-      <Backdrop />
-      <div className="veil" aria-hidden="true" />
+      <ThemeController />
+      <AmbientField />
+      <CursorField />
       <Header />
+      <StateRail />
       <main id="main">
         <Hero />
         {site.sections.map(id => <div key={id}>{renderers[id]()}</div>)}
       </main>
-      <Footer />
       <ProjectDialog project={project} onClose={() => setProject(null)} />
     </>
   );

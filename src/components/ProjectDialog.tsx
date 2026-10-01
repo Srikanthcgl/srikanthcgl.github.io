@@ -1,5 +1,5 @@
-import { useEffect, useRef } from "react";
-import { ExternalLink, X } from "lucide-react";
+import { Fragment, useEffect, useRef } from "react";
+import { ArrowRight, ExternalLink, X } from "lucide-react";
 import type { PortfolioConfig } from "../config/types";
 import { TagList } from "./Term";
 
@@ -33,11 +33,19 @@ export function ProjectDialog({ project, onClose }: { project: Project | null; o
       {project && (
         <div className="dialog-body">
           <button type="button" className="icon-btn dialog-close" onClick={onClose} aria-label="Close"><X size={18} /></button>
-          <p className="dialog-emoji" aria-hidden="true">{project.emoji}</p>
-          <p className="kicker">{project.category}{project.year ? ` · ${project.year}` : ""}</p>
+          <p className="kicker"><span>DOSSIER</span>{project.category}{project.year ? ` · ${project.year}` : ""}</p>
           <h3 id="dialog-title">{project.title}</h3>
           <p className="dialog-summary">{project.summary}</p>
 
+          <h4>System path</h4>
+          <ol className="dossier-flow">
+            {project.flow.map((step, i) => (
+              <Fragment key={`${i}-${step}`}>
+                <li>{step}</li>
+                {i < project.flow.length - 1 && <li aria-hidden="true" className="dossier-arrow"><ArrowRight size={13} /></li>}
+              </Fragment>
+            ))}
+          </ol>
           <h4>What it is</h4>
           <p>{project.whatItIs}</p>
           <h4>Why it matters</h4>

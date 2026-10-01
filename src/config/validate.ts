@@ -1,7 +1,6 @@
 import type { PortfolioConfig } from "./types";
 
-const SECTION_IDS = ["about", "apps", "projects", "skills", "experience", "contact"];
-const HEX = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i;
+const SECTION_IDS = ["about", "projects", "skills", "experience", "contact"];
 
 /** Friendly sanity checks for portfolio.config.ts. Returns human-readable problems (empty = all good). */
 export function validateConfig(c: PortfolioConfig): string[] {
@@ -21,21 +20,28 @@ export function validateConfig(c: PortfolioConfig): string[] {
   for (const id of c.sections) need(c.navLabels[id], `navLabels.${id} is missing`);
   need(SECTION_IDS.includes(c.hero.primaryButton.target), `hero.primaryButton.target "${c.hero.primaryButton.target}" is not a section`);
 
-  dupes(c.apps.items.map(a => a.id), "apps.items");
-  for (const a of c.apps.items) {
-    need(a.name && a.tagline && a.description, `app "${a.id}": name, tagline and description are required`);
-    need(HEX.test(a.color), `app "${a.id}": color "${a.color}" should look like "#7c5cff"`);
-    need(["live", "beta", "in-development"].includes(a.status), `app "${a.id}": status must be live, beta or in-development`);
-    need(a.features.length > 0, `app "${a.id}": add at least one feature`);
+  dupes(c.hero.domains.map(d => d.id), "hero.domains");
+  need(c.hero.domains.length >= 3 && c.hero.domains.length <= 8, "hero.domains: use between 3 and 8 domains so the diagram stays readable");
+  for (const d of c.hero.domains) {
+    need(SECTION_IDS.includes(d.target), `hero domain "${d.id}": target "${d.target}" is not a section`);
+    need(d.code && d.code.length <= 5, `hero domain "${d.id}": code should be a short tag like "ARCH"`);
   }
+
+  dupes(c.about.method.phases.map(p => p.id), "about.method.phases");
+  need(c.about.method.phases.length >= 2, "about.method.phases needs at least two phases");
 
   dupes(c.projects.items.map(p => p.id), "projects.items");
   for (const p of c.projects.items) {
     need(p.title && p.summary && p.whatItIs && p.whyItMatters && p.myRole, `project "${p.id}": title, summary, whatItIs, whyItMatters and myRole are required`);
     need(p.tags.length > 0, `project "${p.id}": add at least one tag`);
+    need(p.flow.length >= 2, `project "${p.id}": flow needs at least two steps`);
   }
 
+  const groupIds = c.skills.groups.map(g => g.id);
+  dupes(groupIds, "skills.groups");
   for (const g of c.skills.groups) need(g.items.length > 0, `skills group "${g.title}" has no items`);
+  for (const [a, b] of c.skills.relations) need(groupIds.includes(a) && groupIds.includes(b), `skills.relations: unknown group in ["${a}", "${b}"]`);
+
   for (const [term, meaning] of Object.entries(c.glossary)) need(meaning.length > 10, `glossary "${term}" needs a longer explanation`);
   return problems;
 }

@@ -1,5 +1,22 @@
 import type { PortfolioConfig } from "./config/types";
 
+/**
+ * ─────────────────────────────────────────────────────────────────────────────
+ *  THE ONLY FILE YOU NEED TO EDIT. Every word, link and setting comes from here.
+ *
+ *  • Add a project ........... copy one block inside `projects.items` (give it a `flow`).
+ *  • Add a skill / tag ....... add a string to a `skills.groups[].items` list.
+ *                              A tech listed in two groups is drawn as a shared link.
+ *  • Hero system nodes ....... edit `hero.domains` (label, techs, which section it opens).
+ *  • Method schematic ........ edit `about.method.phases`.
+ *  • Remove / reorder ........ edit the `sections` list.
+ *  • Explain a term .......... add "Term": "meaning" to `glossary`.
+ *
+ *  Anything containing "TODO" shows in `npm run dev` and is hidden in production.
+ *  Mistakes (duplicate ids, unknown sections…) are reported in the dev console and by `npm test`.
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
+
 export const config: PortfolioConfig = {
   meta: {
     title: "Srikanth Chinthaginjala — Systems Engineer & Architect",
@@ -36,7 +53,6 @@ export const config: PortfolioConfig = {
 
   navLabels: {
     about: "About",
-    apps: "Apps",
     projects: "Work",
     skills: "Engineering",
     experience: "Experience",
@@ -68,6 +84,14 @@ export const config: PortfolioConfig = {
     highlights: [
       { value: "2+", label: "years engineering systems" },
       { value: "7+", label: "engineering domains" },
+    ],
+    domains: [
+      { id: "architecture", label: "System Architecture", code: "ARCH", summary: "Requirements, behaviour, interfaces and data flow.", techs: ["System Design", "Interface Definition", "API Design", "Distributed Systems", "Root Cause Analysis"], target: "about" },
+      { id: "software", label: "Software", code: "SW", summary: "Backend services, APIs, tools and web applications.", techs: ["Python", "C++", "TypeScript", "Node.js", "React", "FastAPI"], target: "projects" },
+      { id: "cloud", label: "Cloud / IoT", code: "CLD", summary: "Edge-to-cloud data, messaging and infrastructure.", techs: ["AWS", "AWS IoT", "MQTT", "Terraform", "Docker", "CI/CD"], target: "skills" },
+      { id: "robotics", label: "Robotics", code: "ROB", summary: "Autonomous mobile robots, fleets and safety.", techs: ["ROS", "LiDAR", "Localization", "Navigation", "Fleet Management"], target: "projects" },
+      { id: "industrial", label: "Industrial", code: "IND", summary: "Making systems work inside real operations.", techs: ["MES", "PLC", "HMI", "Industrial Networking", "Commissioning"], target: "projects" },
+      { id: "edge", label: "Embedded / Edge", code: "EDG", summary: "Controllers, sensors and edge computers.", techs: ["Jetson", "Raspberry Pi", "ESP32", "CAN", "Linux"], target: "skills" },
     ],
   },
 
@@ -112,6 +136,18 @@ export const config: PortfolioConfig = {
         text: "A design only matters when it can be integrated, deployed, validated and operated reliably in the real world.",
       },
     ],
+    method: {
+      title: "How I take a system from requirement to reality",
+      phases: [
+        { id: "requirements", label: "Requirements", detail: "Understand the real problem, users and operating constraints.", covers: ["Customer requirements", "System behaviour"] },
+        { id: "architecture", label: "Architecture", detail: "Decide components, responsibilities and data flow.", covers: ["System architecture", "Trade-offs"] },
+        { id: "interfaces", label: "Interfaces", detail: "Define how every part talks to every other part.", covers: ["APIs", "Messaging", "Protocols"] },
+        { id: "implementation", label: "Implementation", detail: "Build the software, cloud and edge pieces.", covers: ["Software", "Cloud / IoT", "Robotics / Edge"] },
+        { id: "integration", label: "Integration", detail: "Bring it together on site and ship it.", covers: ["Integration", "Deployment"] },
+        { id: "validation", label: "Validation", detail: "Prove it works in reality, then keep improving it.", covers: ["Validation", "Monitoring", "Improvement"] },
+      ],
+      feedback: "monitoring → improvement → new requirements",
+    },
   },
 
   skills: {
@@ -121,6 +157,7 @@ export const config: PortfolioConfig = {
       "I work across multiple engineering layers, connecting software, infrastructure, physical systems and industrial environments.",
     groups: [
       {
+        id: "architecture",
         title: "Systems & Architecture",
         icon: "sparkles",
         description:
@@ -137,6 +174,7 @@ export const config: PortfolioConfig = {
         ],
       },
       {
+        id: "software",
         title: "Software Engineering",
         icon: "code",
         description:
@@ -157,6 +195,7 @@ export const config: PortfolioConfig = {
         ],
       },
       {
+        id: "data",
         title: "Data & Messaging",
         icon: "database",
         description:
@@ -173,6 +212,7 @@ export const config: PortfolioConfig = {
         ],
       },
       {
+        id: "cloud",
         title: "Cloud & Infrastructure",
         icon: "cloud",
         description:
@@ -193,6 +233,7 @@ export const config: PortfolioConfig = {
         ],
       },
       {
+        id: "robotics",
         title: "Robotics",
         icon: "cpu",
         description:
@@ -211,6 +252,7 @@ export const config: PortfolioConfig = {
         ],
       },
       {
+        id: "edge",
         title: "Embedded & Edge",
         icon: "wrench",
         description:
@@ -228,6 +270,7 @@ export const config: PortfolioConfig = {
         ],
       },
       {
+        id: "industrial",
         title: "Industrial Systems",
         icon: "factory",
         description:
@@ -244,6 +287,7 @@ export const config: PortfolioConfig = {
         ],
       },
       {
+        id: "collaboration",
         title: "Engineering Collaboration",
         icon: "users",
         description:
@@ -258,17 +302,11 @@ export const config: PortfolioConfig = {
         ],
       },
     ],
-  },
-
-  /*
-   * Android applications are intentionally not shown in the current portfolio.
-   * Keep this section empty until there are public applications worth showcasing.
-   */
-  apps: {
-    kicker: "Applications",
-    title: "Software products.",
-    intro: "",
-    items: [],
+    relations: [
+      ["architecture", "software"], ["architecture", "cloud"], ["architecture", "industrial"], ["architecture", "collaboration"],
+      ["software", "data"], ["software", "cloud"], ["data", "cloud"], ["data", "robotics"], ["data", "industrial"],
+      ["robotics", "edge"], ["robotics", "industrial"], ["edge", "data"], ["edge", "cloud"], ["industrial", "collaboration"],
+    ],
   },
 
   projects: {
@@ -279,6 +317,7 @@ export const config: PortfolioConfig = {
     items: [
       {
         id: "fleet-platform",
+        flow: ["AMRs", "MQTT", "Fleet manager", "Task dispatch", "Database", "Dashboard"],
         emoji: "🚦",
         title: "Fleet Management System for Autonomous Robots",
         summary:
@@ -306,36 +345,10 @@ export const config: PortfolioConfig = {
         ],
       },
 
-      {
-        id: "robot-position",
-        emoji: "📍",
-        title: "AMR Localization & Safety Monitoring",
-        summary:
-          "Independent monitoring that detects when a robot may be confidently wrong about its position or operating state.",
-        category: "Robotics · Safety · Reliability",
-        whatItIs:
-          "Monitoring logic around autonomous mobile robot localization, steering behaviour and operational safety conditions.",
-        whyItMatters:
-          "A localization system can report a good convergence score while the estimated pose has still shifted unexpectedly. Safety monitoring therefore needs independent checks around robot behaviour and position changes.",
-        myRole:
-          "I analysed recorded robot data, investigated localization behaviour, designed monitoring logic and worked on protection mechanisms around steering and operational conditions.",
-        results: [
-          "Independent detection of abnormal pose changes.",
-          "Zone-based monitoring for operational constraints.",
-          "Offline data analysis used to understand and tune system behaviour.",
-        ],
-        tags: [
-          "ROS",
-          "Python",
-          "LiDAR",
-          "NDT",
-          "Localization",
-          "Path Analysis",
-        ],
-      },
 
       {
         id: "factory-link",
+        flow: ["Customer MES", "REST API", "FMS", "Task assignment", "AMR", "Status feedback"],
         emoji: "🔗",
         title: "MES ↔ Fleet Integration",
         summary:
@@ -363,6 +376,7 @@ export const config: PortfolioConfig = {
 
       {
         id: "robot-data",
+        flow: ["Robot", "MQTT", "AWS IoT", "DynamoDB / S3", "Dashboard"],
         emoji: "☁️",
         title: "Cloud Data Pipeline for Connected Robots",
         summary:
@@ -391,6 +405,7 @@ export const config: PortfolioConfig = {
 
       {
         id: "delivery-screen",
+        flow: ["Operator HMI", "Server", "Store manager", "AMR", "Gate control"],
         emoji: "🏭",
         title: "Industrial HMI & AMR Workflow",
         summary:
@@ -416,33 +431,6 @@ export const config: PortfolioConfig = {
         ],
       },
 
-      {
-        id: "robot-reliability",
-        emoji: "🩺",
-        title: "Robot Deployment & Reliability Automation",
-        summary:
-          "Automating startup, monitoring and recovery so deployed robot systems are more resilient in the field.",
-        category: "Reliability · Edge · DevOps",
-        whatItIs:
-          "Automation around robot computers and software modules to improve startup sequencing, resource monitoring and recovery behaviour.",
-        whyItMatters:
-          "Field-deployed systems need to recover from expected software and resource problems without requiring a technician to manually restart every component.",
-        myRole:
-          "I worked on startup sequencing, staged module launches, system monitoring, resource checks and recovery logic.",
-        results: [
-          "Controlled startup sequence for software modules.",
-          "Resource monitoring to identify unhealthy system states.",
-          "Recovery mechanisms designed around real deployment constraints.",
-        ],
-        tags: [
-          "Linux",
-          "Python",
-          "Docker",
-          "Monitoring",
-          "Edge Computing",
-          "Deployment",
-        ],
-      },
     ],
   },
 

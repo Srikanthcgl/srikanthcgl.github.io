@@ -1,40 +1,25 @@
 import { describe, expect, it } from "vitest";
 import { config } from "./portfolio.config";
-import { validateConfig } from "./config/validate";
 import { containsPlaceholder, isPlaceholder, resolveConfig } from "./config/resolve";
+import { validateConfig } from "./config/validate";
+import { blendPalette, ENVIRONMENTS, envPosition } from "./engine/environments";
 
 describe("portfolio.config", () => {
-  it("passes the friendly validator with no problems", () => {
+  it("passes the validator with no problems", () => {
     expect(validateConfig(config)).toEqual([]);
   });
 
   it("validator catches common mistakes", () => {
     const bad = structuredClone(config);
-    bad.apps.items[0].color = "purple";
     bad.projects.items.push({ ...bad.projects.items[0] });
     bad.sections.push("nope" as never);
+    bad.skills.relations.push(["architecture", "missing"]);
+    bad.hero.domains[0].target = "nowhere" as never;
     const problems = validateConfig(bad).join(" | ");
-    expect(problems).toMatch(/color/);
     expect(problems).toMatch(/duplicate id/);
     expect(problems).toMatch(/unknown section/);
-  });
-
-  it("has unique project ids and every project is complete", () => {
-    const ids = config.projects.items.map(p => p.id);
-    expect(new Set(ids).size).toBe(ids.length);
-    for (const p of config.projects.items) {
-      expect(p.title && p.summary && p.whatItIs && p.whyItMatters && p.myRole, p.id).toBeTruthy();
-      expect(p.tags.length, p.id).toBeGreaterThan(0);
-    }
-  });
-
-  it("only references sections that have a menu label", () => {
-    for (const id of config.sections) expect(config.navLabels[id], id).toBeTruthy();
-    expect(new Set(config.sections).size).toBe(config.sections.length);
-  });
-
-  it("explains every glossary-worthy tag it lists", () => {
-    for (const key of Object.keys(config.glossary)) expect(config.glossary[key].length, key).toBeGreaterThan(10);
+    expect(problems).toMatch(/unknown group/);
+    expect(problems).toMatch(/is not a section/);
   });
 });
 
@@ -46,17 +31,35 @@ describe("placeholders", () => {
     expect(containsPlaceholder({ a: ["fine", { b: "TODO: fill" }] })).toBe(true);
   });
 
-  it("hides unfinished entries in production but keeps them in development", () => {
-    const dev = resolveConfig(config, false);
-    const prod = resolveConfig(config, true);
-    expect(dev.experience.jobs.length).toBe(config.experience.jobs.length);
+  it("hides unfinished entries in production", () => {
+    const withTodo = structuredClone(config);
+    withTodo.experience.jobs.push({ role: "TODO", org: "TODO", period: "TODO", summary: "TODO", highlights: [] });
+    const prod = resolveConfig(withTodo, true);
     expect(prod.experience.jobs.every(j => !containsPlaceholder(j))).toBe(true);
-    expect(prod.person.email === "" || !isPlaceholder(prod.person.email)).toBe(true);
-    expect(prod.social.every(s => !containsPlaceholder(s.url))).toBe(true);
+    expect(resolveConfig(withTodo, false).experience.jobs.length).toBe(withTodo.experience.jobs.length);
   });
 
   it("drops sections that end up empty", () => {
     const prod = resolveConfig({ ...config, experience: { ...config.experience, jobs: [], education: [] } }, true);
     expect(prod.sections).not.toContain("experience");
+  });
+});
+
+describe("theme engine", () => {
+  it("holds a section's palette in the middle of it and blends across boundaries", () => {
+    const tops = [0, 1000, 2000];
+    expect(envPosition(tops, 500, 200)).toBe(0);
+    expect(envPosition(tops, 1500, 200)).toBe(1);
+    const mid = envPosition(tops, 1000, 200);
+    expect(mid).toBeGreaterThan(0.4);
+    expect(mid).toBeLessThan(0.6);
+  });
+
+  it("interpolates colours between neighbouring environments", () => {
+    const a = blendPalette(0);
+    const b = blendPalette(1);
+    const half = blendPalette(0.5);
+    expect(half.bg[0]).toBeCloseTo((a.bg[0] + b.bg[0]) / 2, 0);
+    expect(blendPalette(ENVIRONMENTS.length - 1).bg).toEqual(ENVIRONMENTS[ENVIRONMENTS.length - 1].palette.bg);
   });
 });

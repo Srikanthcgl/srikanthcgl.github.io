@@ -29,14 +29,12 @@ export function resolveConfig(raw: PortfolioConfig, hidePlaceholders: boolean): 
     },
     social: raw.social.filter(s => !isPlaceholder(s.url) && !containsPlaceholder(s.url)),
     hero: { ...raw.hero, highlights: keep(raw.hero.highlights) },
-    apps: { ...raw.apps, items: keep(raw.apps.items) },
     about: { ...raw.about, facts: keep(raw.about.facts) },
     experience: { ...raw.experience, jobs: keep(raw.experience.jobs), education: keep(raw.experience.education) },
   };
 
   const hasContent: Partial<Record<SectionId, boolean>> = {
     experience: out.experience.jobs.length + out.experience.education.length > 0,
-    apps: out.apps.items.length > 0,
     projects: out.projects.items.length > 0,
     skills: out.skills.groups.length > 0,
   };

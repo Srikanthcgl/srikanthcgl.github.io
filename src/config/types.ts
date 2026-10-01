@@ -1,9 +1,8 @@
 /** Shape of `src/portfolio.config.ts`. You should not need to edit this file to change content. */
 
-export type SectionId = "about" | "apps" | "projects" | "skills" | "experience" | "contact";
-export type AppStatus = "live" | "beta" | "in-development";
+export type SectionId = "about" | "projects" | "skills" | "experience" | "contact";
 export type SocialIcon = "github" | "linkedin" | "twitter" | "youtube" | "instagram" | "globe" | "mail";
-export type SkillIcon = "code" | "cloud" | "database" | "wrench" | "palette" | "users" | "chart" | "cpu" | "factory" | "sparkles" | "phone";
+export type SkillIcon = "code" | "cloud" | "database" | "wrench" | "palette" | "users" | "chart" | "cpu" | "factory" | "sparkles";
 export type Availability = "open" | "busy" | "closed";
 
 export interface LinkItem { label: string; url: string }
@@ -22,14 +21,12 @@ export interface PortfolioConfig {
 
   person: {
     name: string;
-    /** Used in "Hi, I'm ___". Defaults to the first word of `name`. */
     firstName?: string;
-    /** One line describing what you do, in plain words. */
+    /** Shown as the eyebrow line above the headline, e.g. "Systems Engineer · System Architect". */
     role: string;
     location: string;
     email: string;
     phone?: string;
-    /** Photo in /public (e.g. "/me.jpg"). If empty, your initials are shown. */
     photo?: string;
     initials: string;
     /** Path to a résumé in /public (e.g. "/resume.pdf"). Empty hides the button. */
@@ -47,9 +44,8 @@ export interface PortfolioConfig {
 
   hero: {
     greeting: string;
-    /** Big sentence under the greeting. */
     headline: string;
-    /** "I build ___" — the words rotate. Leave one word to disable rotation. */
+    /** "I work across ___" — the words rotate. */
     rotatingLead: string;
     rotatingWords: string[];
     intro: string;
@@ -57,6 +53,11 @@ export interface PortfolioConfig {
     secondaryButton?: { label: string; target: SectionId };
     /** Small number highlights. Only add ones you can stand behind. */
     highlights: { value: string; label: string }[];
+    /**
+     * The nodes around the system core in the hero visualization.
+     * Hover / tap reveals `techs`; clicking scrolls to `target`.
+     */
+    domains: { id: string; label: string; code: string; summary: string; techs: string[]; target: SectionId }[];
   };
 
   about: {
@@ -64,43 +65,25 @@ export interface PortfolioConfig {
     title: string;
     paragraphs: string[];
     facts: { label: string; value: string }[];
-    /** "What I care about" cards. */
-    values: { emoji: string; title: string; text: string }[];
+    /** Principles. `emoji` is optional and not shown in the current design. */
+    values: { emoji?: string; title: string; text: string }[];
+    /** The blueprint schematic: how you move from a requirement to a running system. */
+    method: {
+      title: string;
+      phases: { id: string; label: string; detail: string; covers: string[] }[];
+      /** Caption on the loop that returns from the last phase to the first. */
+      feedback: string;
+    };
   };
 
   skills: {
     kicker: string;
     title: string;
     intro: string;
-    groups: { title: string; description: string; icon: SkillIcon; items: string[] }[];
-  };
-
-  /** Your Android apps. Each one gets a phone showcase with screenshots, features and store links. */
-  apps: {
-    kicker: string;
-    title: string;
-    intro: string;
-    items: {
-      id: string;
-      name: string;
-      emoji: string;
-      /** App colour, e.g. "#7c5cff". Used for the phone mockup and highlights. */
-      color: string;
-      /** App icon in /public (optional — the emoji is used otherwise). */
-      icon?: string;
-      tagline: string;
-      description: string;
-      status: AppStatus;
-      year?: string;
-      /** Screenshots in /public, e.g. ["/apps/notes-1.png"]. Leave empty for a generated preview. */
-      screenshots: string[];
-      features: string[];
-      tags: string[];
-      /** Optional highlights such as { value: "10K+", label: "downloads" }. Only add real numbers. */
-      stats: { value: string; label: string }[];
-      /** e.g. { label: "Get it on Google Play", url: "https://play.google.com/store/apps/details?id=..." } */
-      links: LinkItem[];
-    }[];
+    /** Capabilities. Technologies listed in more than one group are drawn as shared links between them. */
+    groups: { id: string; title: string; description: string; icon: SkillIcon; items: string[] }[];
+    /** Which capabilities work closely together (pairs of group ids). */
+    relations: [string, string][];
   };
 
   projects: {
@@ -109,14 +92,15 @@ export interface PortfolioConfig {
     intro: string;
     items: {
       id: string;
-      emoji: string;
+      /** Optional; not shown in the current design. */
+      emoji?: string;
       title: string;
-      /** One friendly sentence anyone can understand. */
       summary: string;
       category: string;
       year?: string;
-      /** Optional cover image in /public. Falls back to a coloured card with the emoji. */
       image?: string;
+      /** The system path, left to right, e.g. ["Robots", "MQTT", "Fleet manager", "Dashboard"]. Shown as a signal chain. */
+      flow: string[];
       whatItIs: string;
       whyItMatters: string;
       myRole: string;
