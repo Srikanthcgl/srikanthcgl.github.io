@@ -33,7 +33,7 @@ export const config: PortfolioConfig = {
     role: "Systems Engineer · System Architect · Software Engineer",
     location: "Bengaluru, India",
     email: "srikanth.cgl1@gmail.com",
-    phone: "+919515087850",
+    phone: "",
     photo: "",
     initials: "SC",
     resume: "",
@@ -45,7 +45,7 @@ export const config: PortfolioConfig = {
 
   social: [
     // Add your real URLs here.
-    // { label: "LinkedIn", url: "https://www.linkedin.com/in/your-profile", icon: "linkedin" },
+    { label: "LinkedIn", url: "https://www.linkedin.com/in/srikanth-cgl/", icon: "linkedin" },
     // { label: "GitHub", url: "https://github.com/your-profile", icon: "github" },
   ],
 
@@ -82,7 +82,7 @@ export const config: PortfolioConfig = {
       target: "skills",
     },
     highlights: [
-      { value: "2.5+", label: "years engineering systems" },
+      { value: "2.5+", label: "years of engineering experience" },
       { value: "8", label: "engineering capabilities" },
     ],
     domains: [
