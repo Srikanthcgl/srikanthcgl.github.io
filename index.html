@@ -1,16 +1,30 @@
 <!doctype html>
 <html lang="%LANG%">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>%TITLE%</title>
-    <meta name="theme-color" content="#05070c" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <!--SEO-->
-  </head>
-  <body>
-    <div id="root"></div>
-    <noscript>This portfolio uses JavaScript to render. Please enable it to view the content.</noscript>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BB4TQEDSDV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-BB4TQEDSDV');
+  </script>
+
+  <title>%TITLE%</title>
+  <meta name="theme-color" content="#05070c" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <!--SEO-->
+</head>
+
+<body>
+  <div id="root"></div>
+  <noscript>This portfolio uses JavaScript to render. Please enable it to view the content.</noscript>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
 </html>
