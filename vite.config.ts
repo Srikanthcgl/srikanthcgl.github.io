@@ -5,6 +5,8 @@ import react from "@vitejs/plugin-react";
 import { config } from "./src/portfolio.config";
 import { isPlaceholder } from "./src/config/resolve";
 
+
+
 const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
 
 /** Fills <title>, description, Open Graph tags and JSON-LD in index.html from portfolio.config.ts. */
@@ -42,4 +44,5 @@ export default defineConfig({
   plugins: [react(), seoFromConfig()],
   build: { sourcemap: false, target: "es2022" },
   test: { environment: "node" },
+  base: "/",
 });

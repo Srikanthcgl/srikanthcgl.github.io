@@ -39,7 +39,7 @@ export const config: PortfolioConfig = {
     resume: "",
     availability: {
       status: "open",
-      text: "Open to interesting engineering problems and conversations",
+      text: "Open to engineering conversations and interesting technical problems",
     },
   },
 
@@ -72,7 +72,7 @@ export const config: PortfolioConfig = {
       "embedded & edge systems",
     ],
     intro:
-      "I'm a systems-focused engineer who designs, integrates and deploys software-driven systems across software, cloud, IoT, robotics and industrial environments.",
+      "I design, integrate and deploy systems across software, cloud, IoT, robotics and industrial environments.",
     primaryButton: {
       label: "Explore my work",
       target: "projects",
@@ -82,8 +82,8 @@ export const config: PortfolioConfig = {
       target: "skills",
     },
     highlights: [
-      { value: "2+", label: "years engineering systems" },
-      { value: "7+", label: "engineering domains" },
+      { value: "2.5+", label: "years engineering systems" },
+      { value: "8", label: "engineering capabilities" },
     ],
     domains: [
       { id: "architecture", label: "System Architecture", code: "ARCH", summary: "Requirements, behaviour, interfaces and data flow.", techs: ["System Design", "Interface Definition", "API Design", "Distributed Systems", "Root Cause Analysis"], target: "about" },
